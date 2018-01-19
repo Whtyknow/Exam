@@ -1,0 +1,43 @@
+﻿<h2>Suppliers</h2>
+
+<div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>SupplierId</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody id="data"></tbody>
+    </table>
+</div>
+<div>
+    <input type="button" id="getAllBtn" value="Get All" class="btn" />
+</div>
+<div style="display:inline-block">
+    <label>Add new Product</label>
+    <input type="text" id="productName" placeholder="Type new product here" class="form-control" />
+    <input type="number" id="productStatus" placeholder="Type new product here" class="form-control" />
+    <input type="number" id="productCity" placeholder="Type new product here" class="form-control" />
+    <input type="button" id="addProductBtn" value="Add" class="btn btn-success" />
+</div>
+
+<div style="display:inline-block">
+    <label>Number of element</label>
+    <input type="number" id="productNumber" placeholder="Type new product here" class="form-control" />
+    <input type="button" id="deleteProductBtn" value="Delete" class="btn btn-info" />
+    <input type="button" id="showUpdateDivBtn" value="Update" class="btn btn-default" />
+</div>
+
+<div id="updateDiv" style="display:none">
+    <input type="text" id="updateProductName" placeholder="Type update here" class="form-control" />
+    <input type="number" id="updateProductStatus" placeholder="Type update here" class="form-control" />
+    <input type="number" id="updateProductCity" placeholder="Type update here" class="form-control" />
+    <input type="button" id="updateProductBtn" value="Update" class="btn btn-success" />
+</div>
+
+@section scripts{
+    <script src="~/Scripts/MyScripts/SupplierScript.js"></script>
+}

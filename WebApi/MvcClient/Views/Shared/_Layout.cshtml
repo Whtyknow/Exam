@@ -20,14 +20,16 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Supplier", "Supplier", "Home")</li>
-                    <li>@Html.ActionLink("Detail", "Detail", "Home")</li>
-                    <li>@Html.ActionLink("Project", "Project", "Home")</li>
-                </ul>                
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                <div id="info">
                     <ul class="nav navbar-nav navbar-right">
-                        <li id="userName"><a href="/Home/Register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                        <li id="logOut"><a href="/Home/Login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </ul>                
+                        <li><a href="/Home/Register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li><a href="/Home/Login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

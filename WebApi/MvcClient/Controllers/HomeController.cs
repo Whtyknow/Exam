@@ -22,20 +22,5 @@ namespace MvcClient.Controllers
         {
             return View();
         }
-
-        public ActionResult Supplier()
-        {
-            return View();
-        }
-
-        public ActionResult Detail()
-        {
-            return View();
-        }
-
-        public ActionResult Project()
-        {
-            return View();
-        }
     }
 }
