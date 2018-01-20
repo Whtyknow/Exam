@@ -35,17 +35,19 @@
                 $.ajax({
                     type: 'POST',
                     url: 'http://localhost:10282/Token',
-                    data: loginData
-                }).success(function (data) {
-                    $('.userName').text(data.userName);
-                    $('.userInfo').css('display', 'block');
-                    $('.loginForm').css('display', 'none');
-                    // сохраняем в хранилище sessionStorage токен доступа
-                    sessionStorage.setItem(tokenKey, data.access_token);
-                    sessionStorage.setItem("Name", data.userName);
-                    setInfo();
-                }).fail(function (data) {
+                    data: loginData,
+                    success: function (data) {
+                        $('.userName').text(data.userName);
+                        $('.userInfo').css('display', 'block');
+                        $('.loginForm').css('display', 'none');
+                        // сохраняем в хранилище sessionStorage токен доступа
+                        sessionStorage.setItem(tokenKey, data.access_token);
+                        sessionStorage.setItem("Name", data.userName);
+                        setInfo();
+                    },
+                fail: function (data) {
                     alert('При логине возникла ошибка');
+                }
                 });
             });
 

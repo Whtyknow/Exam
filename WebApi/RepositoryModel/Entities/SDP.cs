@@ -11,11 +11,11 @@ namespace RepositoryModel.Entities
     {
         public int Id { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public virtual Supplier Supplier { get; set; }
 
-        public Detail Detail { get; set; }
+        public virtual Detail Detail { get; set; }
 
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
 
         public int Quantity { get; set; }
     }

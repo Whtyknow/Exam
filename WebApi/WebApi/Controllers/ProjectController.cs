@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     public class ProjectController : ApiController
     {
         UnitOfWork uow;

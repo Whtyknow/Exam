@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     public class DetailController : ApiController
     {
         UnitOfWork uow;
