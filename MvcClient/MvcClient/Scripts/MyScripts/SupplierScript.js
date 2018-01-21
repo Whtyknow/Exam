@@ -150,6 +150,9 @@ function errorHandler(xhr, textStatus, error) {
         else if (xhr.status == "401") {
             alert("Please authorize")
         }
+        else if (xhr.status == "409") {
+            alert("Entity with this name already exists")
+        }
     }
 
 function ShowUpdate(row) {

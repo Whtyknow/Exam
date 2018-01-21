@@ -47,6 +47,11 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (uow.Suppliers.GetAll().Where(x => x.Name == value.Name).SingleOrDefault() != null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "Value with this name already exists");
+                }
+
                 uow.Suppliers.Create(value);
                 HttpResponseMessage msg = Request.CreateResponse(HttpStatusCode.Created, value);
                 // var msg = Request.CreateResponse(HttpStatusCode.BadRequest);
