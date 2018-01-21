@@ -2,12 +2,13 @@
 $(document).ready(function () {
     $("#getAllBtn").on("click", getAll);
     $("#addProductBtn").on("click", postProduct);
-    $("#updateProductBtn").on("click", putProduct);
-    $("#deleteProductBtn").on("click", deleteProduct);
-    $("#showUpdateDivBtn").on("click", showUpdateDiv);
+    $("#data").on("click", "#delBtn.btn", deleteProduct);
+    $("#data").on("click", "#updBtn.btn", updateProduct);
 });
 
 var baseUri = "http://localhost:10282/api/Detail";
+var delBtn = $('<td><input type="button" value="Delete" id="delBtn" class="btn btn-info"></td>');
+var editBtn = $('<td><input type="button" value="Edit" id="updBtn" class="btn btn-info"></td>');
 
 function getAll() {
     $.ajax({
@@ -23,20 +24,26 @@ function getAll() {
             table.empty();
 
             for (var i = 0; i < Products.length; i++) {
-                table.append("<tr>").
-                    append("<td>" + Products[i].DetailId + "</td>").
+                var tr = $("<tr>").append("<td>" + Products[i].Id + "</td>").
                     append("<td>" + Products[i].Name + "</td>").
                     append("<td>" + Products[i].Color + "</td>").
                     append("<td>" + Products[i].Weight + "</td>").
                     append("<td>" + Products[i].City + "</td>").
-                append("</tr>");
+                    append(editBtn.clone()).
+                    append(delBtn.clone());
+                table.append(tr);
+
             }
-        }
+
+        },
+        error: errorHandler
     });
 }
 
-function postProduct() {
 
+
+function postProduct(e) {
+    e.preventDefault();
     var data = new Object();
     data.name = $("#productName").val();
     data.color = $("#productColor").val();
@@ -56,14 +63,7 @@ function postProduct() {
         },
 
         //позволяет выполнять различные функции, в зависимости от полученного статус-кода
-        statusCode: {
-            201: function () {
-                alert("Created. Имя успешно добавлено в коллекцию.");
-            },
-            400: function () {
-                alert("Bad Request. Операция не выполнена.");
-            }
-        },
+
 
         success: function (data, textStatus, xhr) {
             // data - информация, переданная обратно в теле ответа
@@ -74,26 +74,29 @@ function postProduct() {
 
             $("#location").html("<a href='" + locationHeader + "'>последний элемент</a>");
 
-            $("#data").append("<tr>").
-                append("<td>" + data.DetailId + "</td>").
+            var tr = $("<tr>").append("<td>" + data.Id + "</td>").
                     append("<td>" + data.Name + "</td>").
-                append("<td>" + data.Color + "</td>").
-                append("<td>" + data.Weight + "</td>").
-                append("<td>" + data.City + "</td>").
-                append("</tr>");
+                    append("<td>" + data.Color + "</td>").
+                    append("<td>" + data.Weight + "</td>").
+                    append("<td>" + data.City + "</td>").
+                    append(editBtn.clone()).
+                    append(delBtn.clone());
+
+            $("#data").append(tr);
         },
 
         error: errorHandler
     });
 }
-function putProduct() {
-    var id = $("#productNumber").val();
+function putProduct(id, row) {
+
+
 
     var data = new Object();
-    data.name = $("#productName").val();
-    data.color = $("#productColor").val();
-    data.weight = $("#productWeight").val();
-    data.city = $("#productCity").val();
+    data.name = $("#updateName").val();
+    data.color = $("#updateColor").val();
+    data.weight = $("#updateWeight").val();
+    data.city = $("#updateCity").val();
 
     $.ajax({
         url: baseUri + "/" + id,
@@ -108,8 +111,7 @@ function putProduct() {
         },
 
         success: function (data, status, xhr) {
-            alert('Элемент ' + id + ' изменен');
-            getAll();            
+            HideUpdate(row, data);
         },
 
         error: errorHandler
@@ -117,64 +119,104 @@ function putProduct() {
     $("#updateDiv").hide();
 }
 
-function showUpdateDiv() {
+function deleteProduct() {
 
-    var id = Number($("#productNumber").val());
-    if(!isNaN(id) && id != 0){
-        $.ajax({
-            url: baseUri + "/" + id,
-            type: "GET",
-            beforeSend: function (xhr) {
+    var row = $(this).parent().parent();
+    var id = row.children(':first').html();
 
-                var token = sessionStorage.getItem(tokenKey);
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: function (data) {
+    $.ajax({
+        url: baseUri + "/" + id,
+        type: "DELETE",
+        beforeSend: function (xhr) {
 
-                $("#updateProductName").val(data.Name);
-                $("#updateProductColor").val(data.Color);
-                $("#updateProductWeight").val(data.Weight);
-                $("#updateProductCity").val(data.City);
+            var token = sessionStorage.getItem(tokenKey);
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
 
-                $("#updateDiv").show();
-            },
-            error: errorHandler
-        })    
+        success: function () {
+            getAll();
+        },
+
+        error: errorHandler
+    });
+}
+
+function errorHandler(xhr, textStatus, error) {
+    if (xhr.status == "404") {
+        alert('Элемент не найден.')
     }
+    else if (xhr.status == "400") {
+        alert('Запрос сформирован не правильно.')
+    }
+    else if (xhr.status == "500") {
+        alert('Ошибка сервера.')
+    }
+    else if (xhr.status == "401") {
+        alert("Please authorize")
+    }
+}
+
+function ShowUpdate(row) {
+
+    var Id = row.children(":first").html();
+    var Name = row.children(":nth-child(2)");
+    var Color = row.children(":nth-child(3)");
+    var Weight = row.children(":nth-child(4)");
+    var City = row.children(":nth-child(5)");
+
+    var valueName = $(Name).html();
+    var valueColor = $(Color).html();
+    var valueWeight = $(Weight).html();
+    var valueCity = $(City).html();
+
+    $(Name).empty();
+    $(Color).empty();
+    $(Weight).empty();
+    $(City).empty();
+
+    $(Name).append('<input type="text" value="' + valueName + '" id="updateName' + Id + '" />');
+    $(Color).append('<input type="text" value="' + valueColor + '" id="updateColor' + Id + '" />');
+    $(Weight).append('<input type="text" value="' + valueWeight + '" id="updateWeight' + Id + '" />');
+    $(City).append('<input type="text" value="' + valueCity + '" id="updateCity' + Id + '" />');
 
 }
 
-    function deleteProduct() {
-        var id = $("#productNumber").val();
+function HideUpdate(row, data) {
 
-        $.ajax({
-            url: baseUri + "/" + id,
-            type: "DELETE",
-            beforeSend: function (xhr) {
+    var id = row.children(":first").html();
 
-                var token = sessionStorage.getItem(tokenKey);
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
+    var Name = row.children(":nth-child(2)");
+    var Color = row.children(":nth-child(3)");
+    var Weight = row.children(":nth-child(4)");
+    var City = row.children(":nth-child(5)");
 
-            success: function () {
-                getAll();
-            },
+    $(Name).empty();
+    $(Color).empty();
+    $(Weight).empty();
+    $(City).empty();
 
-            error: errorHandler
-        });
+    $(Name).html(data.Name);
+    $(Color).html(data.Color);
+    $(Weight).html(data.Weight);
+    $(City).html(data.City);
+
+}
+
+function updateProduct() {
+
+    var btn = $(this);
+    var row = $(this).parent().parent();
+    if (btn.val() == "Edit") {
+        ShowUpdate(row);
+        btn.val("Update");
     }
+    else if (btn.val() == "Update") {
+        var Id = row.children(":first").html();
 
-    function errorHandler(xhr, textStatus, error) {
-        if (xhr.status == "404") {
-            alert('Элемент не найден.')
-        }
-        else if (xhr.status == "400") {
-            alert('Запрос сформирован не правильно.')
-        }
-        else if (xhr.status == "500") {
-            alert('Ошибка сервера.')
-        }
+        putProduct(Id, row);
+        btn.val("Edit");
     }
+}
 
 
 

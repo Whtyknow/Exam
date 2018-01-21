@@ -202,7 +202,7 @@ function updateProduct() {
     else if (btn.val() == "Update") {
         var Id = row.children(":first").html();
 
-        putProduct(Id, row);        
+        putProduct(Id, row);
         btn.val("Edit");
     }
 }

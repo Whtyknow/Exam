@@ -4,11 +4,11 @@
 }
 
 <div>
-    <label>Введите email</label><br />
+    <label>Enter email</label><br />
     <input type="email" id="email" /> <br /><br />
-    <label>Введите пароль</label><br />
+    <label>Enter password</label><br />
     <input type="password" id="password" /><br /><br />
-    <label>Подтвердите пароль</label><br />
+    <label>Confirm password</label><br />
     <input type="password" id="confirmpassword" /><br /><br />
     <input type="submit" id="submit" value="Регистрация" />
 </div>
@@ -29,9 +29,9 @@
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data)
             }).success(function (data) {
-                alert("Регистрация пройдена");
+                alert("Registered");
             }).fail(function (data) {
-                alert("В процесе регистрации возникла ошибка");
+                alert("Error");
             });
         });
     })

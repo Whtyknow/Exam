@@ -21,6 +21,14 @@ namespace RepositoryModel
         public DbSet<Detail> Details { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<SDP> SDP { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<SDP>()
+            //    .HasOptional<Supplier>(s => s.Supplier)
+            //    .WithMany()
+            //    .WillCascadeOnDelete(true);
+        }
     }
 
     public class DbInitializer : DropCreateDatabaseIfModelChanges<MyContext>

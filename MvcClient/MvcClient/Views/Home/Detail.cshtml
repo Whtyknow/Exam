@@ -1,19 +1,16 @@
-﻿
-@{
-    ViewBag.Title = "Detail";
-}
-
-<h2>Details</h2>
+﻿<h2 style="text-align:center">Details</h2>
 
 <div>
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>DetailId</th>
+                <th>SupplierId</th>
                 <th>Name</th>
                 <th>Color</th>
                 <th>Weight</th>
                 <th>City</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody id="data"></tbody>
@@ -22,32 +19,42 @@
 <div>
     <input type="button" id="getAllBtn" value="Get All" class="btn" />
 </div>
-<div style="display:inline-block">
-    <label>Add new Product</label>
-    <input type="text" id="productName" placeholder="Type new product here" class="form-control" />
-    <input type="number" id="productColor" placeholder="Type new product here" class="form-control" />
-    <input type="number" id="productWeight" placeholder="Type new product here" class="form-control" />
-    <input type="number" id="productCity" placeholder="Type new product here" class="form-control" />
-    <input type="button" id="addProductBtn" value="Add" class="btn btn-success" />
-</div>
 
-<div style="display:inline-block">
-    <label>Number of element</label>
-    <input type="number" id="productNumber" placeholder="Type new product here" class="form-control" />
-    <input type="button" id="deleteProductBtn" value="Delete" class="btn btn-info" />
-    <input type="button" id="showUpdateDivBtn" value="Update" class="btn btn-default" />
-</div>
 
-<div id="updateDiv" style="display:none">
-    <input type="text" id="updateProductName" placeholder="Type update here" class="form-control" />
-    <input type="number" id="updateProductColor" placeholder="Type update here" class="form-control" />
-    <input type="number" id="updateProductWeight" placeholder="Type update here" class="form-control" />
-    <input type="number" id="updateProductCity" placeholder="Type update here" class="form-control" />
-    <input type="button" id="updateProductBtn" value="Update" class="btn btn-success" />
-</div>
+<h3 style="margin-left:125px;">Add Detail</h3>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-sm-2">Name:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="productName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Color:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="productColor">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">Weight:</label>
+        <div class="col-sm-10">
+            <input type="number" class="form-control" id="productWeight">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2">City:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="productCity">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" id="addProductBtn">Add</button>
+        </div>
+    </div>
+</form>
+
 
 @section scripts{
     <script src="~/Scripts/MyScripts/DetailScript.js"></script>
 }
-
-

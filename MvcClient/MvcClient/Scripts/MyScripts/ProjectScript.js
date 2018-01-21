@@ -2,12 +2,13 @@
 $(document).ready(function () {
     $("#getAllBtn").on("click", getAll);
     $("#addProductBtn").on("click", postProduct);
-    $("#updateProductBtn").on("click", putProduct);
-    $("#deleteProductBtn").on("click", deleteProduct);
-    $("#showUpdateDivBtn").on("click", showUpdateDiv);
+    $("#data").on("click", "#delBtn.btn", deleteProduct);
+    $("#data").on("click", "#updBtn.btn", updateProduct);
 });
 
 var baseUri = "http://localhost:10282/api/Project";
+var delBtn = $('<td><input type="button" value="Delete" id="delBtn" class="btn btn-info"></td>');
+var editBtn = $('<td><input type="button" value="Edit" id="updBtn" class="btn btn-info"></td>');
 
 function getAll() {
     $.ajax({
@@ -23,20 +24,26 @@ function getAll() {
             table.empty();
 
             for (var i = 0; i < Products.length; i++) {
-                table.append("<tr>").
-                    append("<td>" + Products[i].ProjectId + "</td>").
-                    append("<td>" + Products[i].Name + "</td>").
-                    append("<td>" + Products[i].City + "</td>").                    
-                    append("</tr>");
+                var tr = $("<tr>").append("<td>" + Products[i].Id + "</td>").
+                    append("<td>" + Products[i].Name + "</td>").                    
+                    append("<td>" + Products[i].City + "</td>").
+                    append(editBtn.clone()).
+                    append(delBtn.clone());
+                table.append(tr);
+
             }
-        }
+
+        },
+        error: errorHandler
     });
 }
 
-function postProduct() {
 
+
+function postProduct(e) {
+    e.preventDefault();
     var data = new Object();
-    data.name = $("#productName").val();
+    data.name = $("#productName").val();    
     data.city = $("#productCity").val();
 
     $.ajax({
@@ -52,14 +59,7 @@ function postProduct() {
         },
 
         //позволяет выполнять различные функции, в зависимости от полученного статус-кода
-        statusCode: {
-            201: function () {
-                alert("Created. Имя успешно добавлено в коллекцию.");
-            },
-            400: function () {
-                alert("Bad Request. Операция не выполнена.");
-            }
-        },
+
 
         success: function (data, textStatus, xhr) {
             // data - информация, переданная обратно в теле ответа
@@ -70,22 +70,25 @@ function postProduct() {
 
             $("#location").html("<a href='" + locationHeader + "'>последний элемент</a>");
 
-            $("#data").append("<tr>").
-                append("<td>" + data.ProjectId + "</td>").
-                append("<td>" + data.Name + "</td>").
-                append("<td>" + data.City + "</td>").
-                append("</tr>");
+            var tr = $("<tr>").append("<td>" + data.Id + "</td>").
+                    append("<td>" + data.Name + "</td>").                    
+                    append("<td>" + data.City + "</td>").
+                    append(editBtn.clone()).
+                    append(delBtn.clone());
+
+            $("#data").append(tr);
         },
 
         error: errorHandler
     });
 }
-function putProduct() {
-    var id = $("#productNumber").val();
+function putProduct(id, row) {
+
+
 
     var data = new Object();
-    data.name = $("#updateProductName").val();
-    data.city = $("#updateProductCity").val();
+    data.name = $("#updateName" + id).val();    
+    data.city = $("#updateCity" + id).val();
 
     $.ajax({
         url: baseUri + "/" + id,
@@ -100,8 +103,7 @@ function putProduct() {
         },
 
         success: function (data, status, xhr) {
-            alert('Элемент ' + id + ' изменен');
-            getAll();
+            HideUpdate(row, data);
         },
 
         error: errorHandler
@@ -109,32 +111,10 @@ function putProduct() {
     $("#updateDiv").hide();
 }
 
-function showUpdateDiv() {
-
-    var id = Number($("#productNumber").val());
-    if (!isNaN(id) && id != 0) {
-        $.ajax({
-            url: baseUri + "/" + id,
-            type: "GET",
-            beforeSend: function (xhr) {
-
-                var token = sessionStorage.getItem(tokenKey);
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: function (data) {               
-                $("#updateProductName").val(data.Name);
-                $("#updateProductCity").val(data.City);
-                $("#updateProductStatus").val(data.Status);                
-                $("#updateDiv").show();
-            },
-            error: errorHandler
-        })
-    }
-
-}
-
 function deleteProduct() {
-    var id = $("#productNumber").val();
+
+    var row = $(this).parent().parent();
+    var id = row.children(':first').html();
 
     $.ajax({
         url: baseUri + "/" + id,
@@ -162,6 +142,57 @@ function errorHandler(xhr, textStatus, error) {
     }
     else if (xhr.status == "500") {
         alert('Ошибка сервера.')
+    }
+    else if (xhr.status == "401") {
+        alert("Please authorize")
+    }
+}
+
+function ShowUpdate(row) {
+
+    var Id = row.children(":first").html();
+    var Name = row.children(":nth-child(2)");    
+    var City = row.children(":nth-child(3)");
+
+    var valueName = $(Name).html();    
+    var valueCity = $(City).html();
+
+    $(Name).empty();    
+    $(City).empty();
+
+    $(Name).append('<input type="text" value="' + valueName + '" id="updateName' + Id + '" />');    
+    $(City).append('<input type="text" value="' + valueCity + '" id="updateCity' + Id + '" />');
+
+}
+
+function HideUpdate(row, data) {
+
+    var id = row.children(":first").html();
+
+    var Name = row.children(":nth-child(2)");   
+    var City = row.children(":nth-child(3)");
+
+    $(Name).empty();    
+    $(City).empty();
+
+    $(Name).html(data.Name);    
+    $(City).html(data.City);
+
+}
+
+function updateProduct() {
+
+    var btn = $(this);
+    var row = $(this).parent().parent();
+    if (btn.val() == "Edit") {
+        ShowUpdate(row);
+        btn.val("Update");
+    }
+    else if (btn.val() == "Update") {
+        var Id = row.children(":first").html();
+
+        putProduct(Id, row);
+        btn.val("Edit");
     }
 }
 

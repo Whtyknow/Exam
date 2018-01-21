@@ -19,12 +19,12 @@ namespace Repository
         public void Create(T obj)
         {
             dbSet.Add(obj);
-            db.SaveChanges();
+            db.SaveChanges();            
         }
 
         public void Delete(T obj)
         {
-            dbSet.Remove(obj);
+            dbSet.Remove(obj);            
             db.SaveChanges();
         }
 

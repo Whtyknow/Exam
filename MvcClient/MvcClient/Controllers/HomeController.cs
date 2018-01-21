@@ -37,5 +37,9 @@ namespace MvcClient.Controllers
         {
             return View();
         }
+        public ActionResult SDP()
+        {
+            return View();
+        }
     }
 }
