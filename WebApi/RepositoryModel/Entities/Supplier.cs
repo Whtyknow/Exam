@@ -18,5 +18,6 @@ namespace RepositoryModel.Entities
         public string Status { get; set; }
 
         public string City { get; set; }
+        
     }
 }

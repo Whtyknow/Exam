@@ -10,7 +10,7 @@
     <input type="password" id="password" /><br /><br />
     <label>Confirm password</label><br />
     <input type="password" id="confirmpassword" /><br /><br />
-    <input type="submit" id="submit" value="Регистрация" />
+    <input type="submit" id="submit" value="Register" />
 </div>
 @section scripts{
     <script type="text/javascript">
@@ -27,11 +27,13 @@
                 type: 'POST',
                 url: 'http://localhost:10282/api/Account/Register',
                 contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(data)
-            }).success(function (data) {
-                alert("Registered");
-            }).fail(function (data) {
-                alert("Error");
+                data: JSON.stringify(data),
+                success: function (data) {
+                    alert("Registered")
+                },
+                error: function (data) {
+                    alert("Server error");
+                }
             });
         });
     })

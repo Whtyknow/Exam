@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,21 +22,16 @@ namespace RepositoryModel
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Detail> Details { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<SDP> SDP { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //modelBuilder.Entity<SDP>()
-            //    .HasOptional<Supplier>(s => s.Supplier)
-            //    .WithMany()
-            //    .WillCascadeOnDelete(true);
-        }
+        public DbSet<SDP> SDP { get; set; }        
     }
 
     public class DbInitializer : DropCreateDatabaseIfModelChanges<MyContext>
     {
         protected override void Seed(MyContext context)
         {
+            
+
+
             Supplier s = new Supplier() { Name = "Petro", City = "Lviv", Status = "Manager" };
             Detail d = new Detail() { Name = "D1", City = "Lviv", Color = "red", Weight = 46 };
             Project p = new Project() { Name = "P1", City = "Lviv" };
